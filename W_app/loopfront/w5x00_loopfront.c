@@ -16,7 +16,7 @@
 #include "wizchip_conf.h"
 #include "w5x00_spi.h"
 
-#include "loopback.h"
+#include "loopfront.h"
 
 /**
  * ----------------------------------------------------------------------------------------------------
@@ -44,7 +44,7 @@
 static wiz_NetInfo g_net_info =
     {
         .mac = {0x00, 0x08, 0xDC, 0x12, 0x34, 0x56}, // MAC address
-        .ip = {192, 168, 80, 107},                    // IP address
+        .ip = {192, 168, 80, 110},                    // IP address
         .sn = {255, 255, 255, 0},                    // Subnet Mask
         .gw = {192, 168, 80, 1},                      // Gateway
         .dns = {8, 8, 8, 8},                         // DNS server
@@ -77,7 +77,7 @@ int main()
     set_clock_khz();
 
     stdio_init_all();
-    sleep_ms(5000);
+    sleep_ms(5001);
 
     wizchip_spi_initialize();
     wizchip_cris_initialize();
@@ -91,15 +91,17 @@ int main()
     /* Get network information */
     print_network_information(g_net_info);
 
+    uint8_t destip[]= {192,168,80,107};
+    uint16_t destport = 11000;
     /* Infinite loop */
     while (1)
     {
         /* TCP server loopback test */
-        if ((retval = loopback_tcps(SOCKET_LOOPBACK, g_loopback_buf, PORT_LOOPBACK)) < 0)
+        if ((retval = loopfront_tcpc(SOCKET_LOOPBACK, g_loopback_buf, destip, destport)) < 0)
         {
             printf(" Loopback error : %d\n", retval);
 
-            while (1)
+            while (retval != -13)
                 ;
         }
     }

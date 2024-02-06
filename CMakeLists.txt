@@ -61,7 +61,8 @@ add_definitions(-DMBEDTLS_CONFIG_FILE="${PORT_DIR}/mbedtls/inc/ssl_config.h")
 add_definitions(-DSET_TRUSTED_CERT_IN_SAMPLES)
 
 # Hardware-specific examples in subdirectories:
-add_subdirectory(examples)
+#add_subdirectory(examples)
+add_subdirectory(W_app)
 
 # Add libraries in subdirectories
 add_subdirectory(${CMAKE_SOURCE_DIR}/libraries)
